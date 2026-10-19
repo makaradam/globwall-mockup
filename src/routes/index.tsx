@@ -32,6 +32,7 @@ function Index() {
       <Nav />
       <Hero />
       <Cta />
+      <Footer />
     </main>
   );
 }
@@ -125,13 +126,101 @@ function WallPanel() {
 }
 
 function Cta() {
+  const tools = [
+    { i: ">_", t: "NPM Package", d: "React, Next.js & Vue" },
+    { i: "◆", t: "Figma Kit", d: "Components & tokens" },
+    { i: "↓", t: "Raw 3D & Lottie", d: "WebP, SVG & JSON" },
+    { i: "ϟ", t: "Edge CDN", d: "Instant avatar URLs" },
+  ];
   return (
-    <section className="flex flex-col items-center px-6 py-40 text-center">
-      <img src={violet} alt="" loading="lazy" width={1024} height={1024} className="animate-bob glob-shadow w-40" />
-      <h2 className="mt-8 text-5xl font-extrabold tracking-tight md:text-7xl">Your spot is waiting.</h2>
-      <button className="mt-8 inline-flex items-center gap-3 rounded-full bg-primary px-6 py-3 text-lg text-primary-foreground shadow-xl transition-transform hover:scale-105">
-        Claim a spot <span className="rounded-full bg-background/15 px-2 py-0.5 font-mono text-xs">from $1</span>
-      </button>
+    <section className="section-soft px-6 pb-24 pt-32">
+      <p className="mx-auto max-w-3xl text-center font-mono text-xs text-muted-foreground">
+        One-time fee from $1 · Rare spots up to $99 · Permanent dofollow link to your product
+      </p>
+      <div className="mx-auto mt-24 max-w-5xl text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 font-mono text-[11px]">
+          ▣ Coming soon for developers <span className="text-glob-lime">•</span> <span className="text-muted-foreground">300+ animated 3D mascots</span>
+        </span>
+        <h2 className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl">
+          Motion Glob Avatars for <span className="text-muted-foreground">Your Next Project</span>
+        </h2>
+        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          Give your app a friendly 3D personality. An open avatar set made to drop into any design or engineering stack in minutes.
+        </p>
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {tools.map((x) => (
+            <div key={x.t} className="flex items-center gap-3 rounded-xl border bg-card p-4 text-left shadow-sm">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg border bg-muted font-mono text-xs">{x.i}</span>
+              <div><p className="text-sm font-semibold">{x.t}</p><p className="text-xs text-muted-foreground">{x.d}</p></div>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-24 font-mono text-[11px] font-semibold uppercase tracking-widest">Real-world use cases</p>
+        <h3 className="mt-3 text-3xl font-extrabold tracking-tight">Built for Everyday Product Interfaces</h3>
+        <p className="mt-2 text-sm text-muted-foreground">Four spots where a glob makes your product feel a little more human.</p>
+        <div className="mt-10 grid gap-3 text-left sm:grid-cols-2 lg:grid-cols-4">
+          <UseCase title="User Profiles & Fallbacks" desc="Swap empty initials and grey silhouettes for friendly default avatars across teams, profiles and comments.">
+            <div className="flex items-center gap-3 rounded-xl border bg-card p-3 shadow-sm">
+              <img src={yellow} alt="" loading="lazy" width={1024} height={1024} className="h-9 w-9" />
+              <div><p className="text-xs font-semibold">Sarah Chen <span className="rounded bg-secondary px-1 font-mono text-[9px]">Pro</span></p><p className="text-[10px] text-muted-foreground">Founding Engineer @ Acme</p></div>
+            </div>
+          </UseCase>
+          <UseCase title="AI Copilots & Chatbots" desc="Give assistants visible moods — thinking, listening, celebrating — so they feel alive.">
+            <div className="rounded-xl bg-primary p-3 text-primary-foreground shadow-lg">
+              <div className="flex items-center justify-between text-[11px]"><span className="flex items-center gap-1"><img src={blue} alt="" loading="lazy" width={1024} height={1024} className="h-4 w-4" /> Glob Copilot</span><span className="font-mono text-glob-blue">Thinking…</span></div>
+              <p className="mt-2 rounded-md bg-background/10 p-2 text-[10px]">Spotted 3 slow queries. Add indexes automatically?</p>
+              <div className="mt-2 flex gap-1 text-[10px]"><span className="rounded bg-background/15 px-2 py-0.5">ϟ Apply</span><span className="px-2 py-0.5 opacity-60">Review</span></div>
+            </div>
+          </UseCase>
+          <UseCase title="Empty States & 404 Pages" desc="Make empty inboxes, no-result searches and 404s a pleasant little pause.">
+            <div className="text-center"><img src={violet} alt="" loading="lazy" width={1024} height={1024} className="mx-auto h-10 w-10" /><p className="mt-1 text-xs font-semibold">All caught up!</p><p className="text-[10px] text-muted-foreground">Nothing left in the backlog</p></div>
+          </UseCase>
+          <UseCase title="Streaks & Milestones" desc="Cheer on finished onboarding, streaks and daily wins with playful motion.">
+            <div className="flex items-center gap-2 rounded-xl border bg-card p-3 shadow-sm">
+              <img src={pink} alt="" loading="lazy" width={1024} height={1024} className="h-7 w-7" />
+              <div className="flex-1"><p className="text-xs font-semibold">7-Day Streak! 🔥</p><p className="text-[10px] text-muted-foreground">Top 5% this week</p></div>
+              <span className="rounded bg-glob-pink/15 px-1 font-mono text-[9px] text-glob-pink">+150 XP</span>
+            </div>
+          </UseCase>
+        </div>
+
+        <div className="mx-auto mt-16 max-w-md rounded-2xl border bg-card p-8 shadow-lg">
+          <h3 className="text-lg font-semibold">Get Early Access to Motion Avatars</h3>
+          <p className="mt-2 text-xs text-muted-foreground">Join the list for the npm package, the Figma kit and 20 free high-res mascots on launch day.</p>
+          <div className="mt-5 flex gap-2">
+            <div className="flex h-10 flex-1 items-center rounded-lg border px-3 text-xs text-muted-foreground">Enter your developer email</div>
+            <span className="inline-flex h-10 items-center rounded-full bg-primary px-4 text-sm text-primary-foreground shadow-md">Join Waitlist ↗</span>
+          </div>
+        </div>
+      </div>
     </section>
+  );
+}
+
+function UseCase({ title, desc, children }: { title: string; desc: string; children: React.ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-xl border bg-card">
+      <div className="flex min-h-28 items-center justify-center bg-muted/50 p-3"><div className="w-full">{children}</div></div>
+      <div className="p-4"><p className="text-sm font-semibold">{title}</p><p className="mt-2 text-xs leading-relaxed text-muted-foreground">{desc}</p></div>
+    </div>
+  );
+}
+
+function Footer() {
+  const badges = ["twelve.tools", "Uneed", "LetsLaunch", "Acid Tools", "Unite List", "Startup Fame", "ShowMySites", "DanielLaunches", "NoonLaunch"];
+  return (
+    <footer className="border-t bg-card px-6 py-10 text-center">
+      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Featured on</p>
+      <div className="mt-4 flex flex-wrap justify-center gap-3">
+        {badges.map((b) => (
+          <span key={b} className="rounded-md border px-3 py-1.5 text-left leading-tight">
+            <span className="block font-mono text-[7px] uppercase text-muted-foreground">Featured on</span>
+            <span className="text-xs font-semibold">{b}</span>
+          </span>
+        ))}
+      </div>
+      <p className="mt-8 border-t pt-6 text-xs text-muted-foreground">© Globwall. Cute avatars for developers · A permanent launch wall for founders.</p>
+    </footer>
   );
 }
