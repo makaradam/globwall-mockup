@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import pink from "@/assets/blob-pink.png";
 import blue from "@/assets/blob-blue.png";
@@ -7,6 +7,7 @@ import green from "@/assets/blob-green.png";
 import yellow from "@/assets/blob-yellow.png";
 import orange from "@/assets/blob-orange.png";
 import violet from "@/assets/blob-violet.png";
+import heroBg from "@/assets/hero-bg.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,9 +31,6 @@ function Index() {
     <main className="overflow-x-clip bg-background text-foreground">
       <Nav />
       <Hero />
-      <Orbit />
-      <Steps />
-      <Wall />
       <Cta />
     </main>
   );
