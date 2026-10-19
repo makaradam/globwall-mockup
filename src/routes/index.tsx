@@ -38,7 +38,7 @@ function Index() {
 
 function Nav() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-50 bg-background/60 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <span className="text-2xl font-extrabold tracking-tight">globwall</span>
         <button className="rounded-full border bg-card/80 px-4 py-1.5 text-sm shadow-sm backdrop-blur">Sign in</button>
@@ -56,7 +56,7 @@ function Hero() {
   const bgBlur = useTransform(p, [0, 0.8], ["blur(0px)", "blur(6px)"]);
   const textY = useTransform(p, [0, 0.5], [0, -120]);
   const textO = useTransform(p, [0, 0.4], [1, 0]);
-  const wallY = useTransform(p, [0, 1], ["62vh", "8vh"]);
+  const wallY = useTransform(p, [0, 1], ["62vh", "11vh"]);
   const wallRot = useTransform(p, [0, 1], [38, 0]);
   const wallScale = useTransform(p, [0, 1], [0.86, 1]);
 
@@ -89,7 +89,7 @@ function Hero() {
 }
 
 function WallPanel() {
-  const cells = Array.from({ length: 30 }, (_, i) => i);
+  const cells = Array.from({ length: 40 }, (_, i) => i);
   return (
     <div className="wall-panel mx-auto max-w-6xl rounded-3xl border p-4">
       <div className="flex flex-wrap items-center gap-3 border-b pb-4">
