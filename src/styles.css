@@ -157,3 +157,8 @@
 .glob-shadow { filter: drop-shadow(0 30px 30px color-mix(in oklab, var(--foreground) 18%, transparent)); }
 @keyframes bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
 .animate-bob { animation: bob 4s ease-in-out infinite; }
+
+.hero-fade { background: linear-gradient(to bottom, transparent, var(--background)); }
+.wall-panel { background: color-mix(in oklab, var(--card) 88%, transparent); backdrop-filter: blur(20px); box-shadow: 0 40px 120px -30px color-mix(in oklab, var(--foreground) 30%, transparent), 0 0 0 1px color-mix(in oklab, var(--foreground) 4%, transparent); }
+.wall-card { background: var(--card); box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 6%, transparent); transition: box-shadow .3s; }
+.wall-card:hover { box-shadow: 0 18px 30px -12px color-mix(in oklab, var(--foreground) 25%, transparent); }
