@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import pink from "@/assets/blob-pink.png";
 import blue from "@/assets/blob-blue.png";
 import green from "@/assets/blob-green.png";
@@ -126,7 +127,7 @@ function WallPanel() {
           ))}
         </div>
       </div>
-      <div data-lenis-prevent className="mt-4 max-h-[72vh] overflow-y-auto overscroll-contain pr-1">
+      <div data-lenis-prevent className="mt-4 h-[72vh] overflow-y-auto overscroll-contain pr-1">
         {cells.length === 0 && <p className="py-16 text-center text-sm text-muted-foreground">No globs match "{q}".</p>}
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10">
           {cells.map((i) => {
@@ -150,8 +151,8 @@ function WallPanel() {
           })}
         </div>
       </div>
-      {picked !== null && (
-        <div className="absolute inset-0 z-30 flex items-center justify-center rounded-3xl bg-background/60 backdrop-blur-sm" onClick={() => setPicked(null)}>
+      {picked !== null && createPortal(
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/60 backdrop-blur-sm" onClick={() => setPicked(null)}>
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} onClick={(e) => e.stopPropagation()}
             className="w-80 rounded-2xl border bg-card p-6 text-center shadow-2xl">
             <img src={BLOBS[(picked * 7) % 6]} alt="" width={1024} height={1024} className="animate-bob mx-auto w-28" />
@@ -162,7 +163,7 @@ function WallPanel() {
             <div className="mt-2 h-9 rounded-lg border px-3 text-left text-sm leading-9 text-muted-foreground">https://</div>
             <button onClick={() => setPicked(null)} className="mt-4 w-full rounded-full bg-primary py-2 text-sm text-primary-foreground">Continue — ${price(picked)}</button>
           </motion.div>
-        </div>
+        </div>, document.body
       )}
     </div>
   );
