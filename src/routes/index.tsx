@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import pink from "@/assets/blob-pink.png";
 import blue from "@/assets/blob-blue.png";
 import green from "@/assets/blob-green.png";
@@ -89,38 +89,81 @@ function Hero() {
   );
 }
 
+const CLAIMED: Record<number, { name: string; cat: string }> = {
+  0: { name: "Nimbus", cat: "Tool" }, 1: { name: "Parcel", cat: "SaaS" }, 2: { name: "Sprout", cat: "AI" },
+  3: { name: "Launchly", cat: "Tool" }, 4: { name: "Echo", cat: "Audio" }, 5: { name: "Atelier", cat: "Design" },
+};
+const RARE = new Set([49, 99, 149, 199, 249, 299, 77, 177, 222, 288]);
+const CENTER = new Set([144, 145, 154, 155]);
+const price = (i: number) => (RARE.has(i) ? 99 : CENTER.has(i) ? 49 : i < 12 ? 1 : 5);
+
 function WallPanel() {
-  const cells = Array.from({ length: 40 }, (_, i) => i);
+  const [q, setQ] = useState("");
+  const [tab, setTab] = useState<"all" | "open" | "taken" | "rare">("all");
+  const [picked, setPicked] = useState<number | null>(null);
+  const cells = useMemo(() => Array.from({ length: 300 }, (_, i) => i).filter((i) => {
+    const c = CLAIMED[i];
+    if (tab === "open" && c) return false;
+    if (tab === "taken" && !c) return false;
+    if (tab === "rare" && !RARE.has(i) && !CENTER.has(i)) return false;
+    if (!q.trim()) return true;
+    const t = q.toLowerCase();
+    return `#${String(i + 1).padStart(3, "0")}`.includes(t) || (c && (c.name + " " + c.cat).toLowerCase().includes(t));
+  }), [q, tab]);
+  const taken = Object.keys(CLAIMED).length;
+  const tabs = [["all", `All (300)`], ["open", `Open (${300 - taken})`], ["taken", `Taken (${taken})`], ["rare", "★ Rare"]] as const;
+
   return (
-    <div className="wall-panel mx-auto max-w-6xl rounded-3xl border p-4">
+    <div className="wall-panel relative mx-auto max-w-6xl rounded-3xl border p-4">
       <div className="flex flex-wrap items-center gap-3 border-b pb-4">
-        <div className="flex h-9 w-56 items-center rounded-lg border bg-card px-3 text-sm text-muted-foreground">⌕ Search products…</div>
-        <button className="h-9 rounded-lg bg-primary px-3 text-sm text-primary-foreground">+ Claim a spot</button>
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="⌕ Search products, #number…"
+          className="h-9 w-56 rounded-lg border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+        <button onClick={() => setPicked(cells.find((i) => !CLAIMED[i]) ?? null)} className="h-9 rounded-lg bg-primary px-3 text-sm text-primary-foreground">+ Claim a spot</button>
         <div className="ml-auto flex rounded-lg bg-muted p-1 text-sm">
-          <span className="rounded-md bg-card px-3 py-1 shadow-sm">All (300)</span>
-          <span className="px-3 py-1 text-muted-foreground">Open (294)</span>
-          <span className="px-3 py-1 text-muted-foreground">Taken (6)</span>
+          {tabs.map(([k, l]) => (
+            <button key={k} onClick={() => setTab(k)}
+              className={`rounded-md px-3 py-1 transition ${tab === k ? "bg-card shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>{l}</button>
+          ))}
         </div>
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10">
-        {cells.map((i) => {
-          const claimed = i < 6;
-          return (
-            <motion.div key={i} whileHover={{ y: -6 }} transition={{ type: "spring", stiffness: 300 }}
-              className="wall-card group flex flex-col items-center rounded-2xl border p-2">
-              <div className="flex w-full justify-between font-mono text-[10px] text-muted-foreground">
-                <span>#{String(i + 1).padStart(3, "0")}</span>
-                {claimed && <span className="rounded bg-secondary px-1">Tool</span>}
-              </div>
-              <img src={BLOBS[i % 6]} alt="" loading="lazy" width={1024} height={1024}
-                className="my-1 w-16 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
-              <span className={`w-full truncate rounded-md px-1 py-1 text-center text-[11px] ${claimed ? "bg-primary font-semibold text-primary-foreground" : "border border-dashed font-mono text-muted-foreground"}`}>
-                {claimed ? NAMES[i] : i < 12 ? "$1 claim" : "$5 claim"}
-              </span>
-            </motion.div>
-          );
-        })}
+      <div data-lenis-prevent className="mt-4 max-h-[72vh] overflow-y-auto overscroll-contain pr-1">
+        {cells.length === 0 && <p className="py-16 text-center text-sm text-muted-foreground">No globs match "{q}".</p>}
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10">
+          {cells.map((i) => {
+            const c = CLAIMED[i];
+            const special = RARE.has(i) ? "★ Rare" : CENTER.has(i) ? "★ Center" : c?.cat;
+            return (
+              <motion.button key={i} layout whileHover={{ y: -6 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                onClick={() => !c && setPicked(i)}
+                className={`wall-card group flex flex-col items-center rounded-2xl border p-2 ${RARE.has(i) || CENTER.has(i) ? "ring-1 ring-glob-sun" : ""}`}>
+                <div className="flex w-full justify-between font-mono text-[10px] text-muted-foreground">
+                  <span>#{String(i + 1).padStart(3, "0")}</span>
+                  {special && <span className="rounded bg-secondary px-1">{special}</span>}
+                </div>
+                <img src={BLOBS[(i * 7) % 6]} alt="" loading="lazy" width={1024} height={1024}
+                  className="my-1 w-16 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
+                <span className={`w-full truncate rounded-md px-1 py-1 text-center text-[11px] ${c ? "bg-primary font-semibold text-primary-foreground" : "border border-dashed font-mono text-muted-foreground group-hover:border-solid group-hover:text-foreground"}`}>
+                  {c ? `${c.name} ↗` : `$${price(i)} claim`}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
+      {picked !== null && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center rounded-3xl bg-background/60 backdrop-blur-sm" onClick={() => setPicked(null)}>
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} onClick={(e) => e.stopPropagation()}
+            className="w-80 rounded-2xl border bg-card p-6 text-center shadow-2xl">
+            <img src={BLOBS[(picked * 7) % 6]} alt="" width={1024} height={1024} className="animate-bob mx-auto w-28" />
+            <p className="mt-2 font-mono text-xs text-muted-foreground">Glob #{String(picked + 1).padStart(3, "0")}</p>
+            <h4 className="text-xl font-extrabold">Claim this spot</h4>
+            <p className="mt-1 text-sm text-muted-foreground">One-time ${price(picked)} · permanent link</p>
+            <div className="mt-4 h-9 rounded-lg border px-3 text-left text-sm leading-9 text-muted-foreground">Product name</div>
+            <div className="mt-2 h-9 rounded-lg border px-3 text-left text-sm leading-9 text-muted-foreground">https://</div>
+            <button onClick={() => setPicked(null)} className="mt-4 w-full rounded-full bg-primary py-2 text-sm text-primary-foreground">Continue — ${price(picked)}</button>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
