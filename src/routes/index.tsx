@@ -133,7 +133,7 @@ function Cta() {
     { i: "ϟ", t: "Edge CDN", d: "Instant avatar URLs" },
   ];
   return (
-    <section className="section-soft px-6 pb-24 pt-32">
+    <section className="section-soft px-6 pb-24 pt-4">
       <p className="mx-auto max-w-3xl text-center font-mono text-xs text-muted-foreground">
         One-time fee from $1 · Rare spots up to $99 · Permanent dofollow link to your product
       </p>
